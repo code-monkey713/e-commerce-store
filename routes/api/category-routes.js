@@ -6,7 +6,7 @@ const { Category, Product } = require('../../models');
 router.get('/', (req, res) => {
   // find all categories
   Category.findAll({
-    // include: [{ model: Product }],
+    include: [{ model: Product }],
     order: ['category_name'],
   }).then((categoryData) => {
     res.json(categoryData);
@@ -35,9 +35,37 @@ router.post('/', (req, res) => {
     });
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', async (req, res) => {
   // update a category by its `id` value
-  
+  Category.update(
+    {
+      // All the fields you can update and the data attached to the request body.
+      category_name: req.body.category_name,
+    },
+    {
+      where: {
+        id: req.params.id,
+      },
+    }
+  )
+    .then((updatedCategory) => {
+      res.json(updatedCategory);
+    })
+    // .catch((err) => res.json(err));
+    // try {
+    //   const userData = await Category.update(req.body, {
+    //     where: {
+    //       id: req.params.id,
+    //     },
+    //   });
+    //   if (!userData[0]) {
+    //     res.status(404).json({ message: 'No category with this id!' });
+    //     return;
+    //   }
+    //   res.status(200).json(userData);
+    // } catch (err) {
+    //   res.status(500).json(err);
+    // }
 });
 
 router.delete('/:id', (req, res) => {
