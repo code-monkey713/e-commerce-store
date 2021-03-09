@@ -17,7 +17,14 @@ router.get('/', (req, res) => {
 
 router.get('/:id', (req, res) => {
   // find one category by its `id` value
-  Category.findByPk(req.params.id).then((categoryData) => {
+  // Category.findByPk(req.params.id).then((categoryData) => {
+  //   res.json(categoryData);
+  // });
+  Category.findOne({
+    include: [{ model: Product }],
+    where: { id: req.params.id },
+    // order: ['category_name'],
+  }).then((categoryData) => {
     res.json(categoryData);
   });
 
