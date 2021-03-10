@@ -25,6 +25,7 @@ router.get('/:id', (req, res) => {
     where: { id: req.params.id },
     // order: ['category_name'],
   }).then((categoryData) => {
+    // console.log(categoryData);
     res.json(categoryData);
   });
 
@@ -35,9 +36,11 @@ router.post('/', (req, res) => {
   // create a new category
   Category.create(req.body)
     .then((newCategory) => {
+      // res.status(200).json(newCategory);
       res.json(newCategory);
     })
     .catch((err) => {
+      // res.status(500).json(err);
       res.json(err);
     });
 });
