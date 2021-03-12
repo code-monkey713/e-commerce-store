@@ -46,14 +46,14 @@ router.put('/:id', async (req, res) => {
       },
     }
   )
-    .then(() => {
-      Category.findOne({
-        include: [{ model: Product }],
-        where: { id: req.params.id },
-      }).then((categoryData) => {
-        res.json(categoryData);
-      });
-    })
+  .then(() => {
+    Category.findOne({
+      include: [{ model: Product }],
+      where: { id: req.params.id },
+    }).then((categoryData) => {
+      res.json(categoryData);
+    });
+  })
 });
 
 router.delete('/:id', (req, res) => {
