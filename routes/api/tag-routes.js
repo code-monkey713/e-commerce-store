@@ -21,9 +21,9 @@ router.get('/:id', (req, res) => {
     include: [{ model: Product }],
     where: { id: req.params.id },
     // order: ['category_name'],
-  }).then((productData) => {
+  }).then((tagData) => {
     // console.log(categoryData);
-    res.json(productData);
+    res.json(tagData);
   });
 });
 
@@ -44,7 +44,6 @@ router.put('/:id', (req, res) => {
   // update a tag's name by its `id` value
   Tag.update(
     {
-      // All the fields you can update and the data attached to the request body.
       tag_name: req.body.tag_name,
     },
     {
@@ -53,8 +52,13 @@ router.put('/:id', (req, res) => {
       },
     }
   )
-    .then((updatedTag) => {
-      res.json(updatedTag);
+    .then(() => {
+      Tag.findOne({
+        include: [{ model: Product }],
+        where: { id: req.params.id },
+      }).then((tagData) => {
+        res.json(tagData);
+      });
     })
 });
 
