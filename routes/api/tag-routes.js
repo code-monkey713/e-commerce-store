@@ -7,22 +7,18 @@ router.get('/', (req, res) => {
   // find all tags
   Tag.findAll({
     include: [{ model: Product }],
-    // order: ['category_name'],
+    order: ['tag_name'],
   }).then((tagData) => {
     res.json(tagData);
   });
-  // be sure to include its associated Product data
 });
 
 router.get('/:id', (req, res) => {
   // find a single tag by its `id`
-  // be sure to include its associated Product data
   Tag.findOne({
     include: [{ model: Product }],
     where: { id: req.params.id },
-    // order: ['category_name'],
   }).then((tagData) => {
-    // console.log(categoryData);
     res.json(tagData);
   });
 });
@@ -31,11 +27,9 @@ router.post('/', (req, res) => {
   // create a new tag
   Tag.create(req.body)
   .then((newTag) => {
-    // res.status(200).json(newCategory);
     res.json(newTag);
   })
   .catch((err) => {
-    // res.status(500).json(err);
     res.json(err);
   });
 });
@@ -69,8 +63,8 @@ router.delete('/:id', (req, res) => {
       id: req.params.id,
     },
   })
-    .then((deletedTag) => {
-      res.json(deletedTag);
+    .then(() => {
+      res.json(`The tag with id:${req.params.id} has been deleted.`);
     })
     .catch((err) => res.json(err));
 });

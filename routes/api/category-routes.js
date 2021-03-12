@@ -11,36 +11,25 @@ router.get('/', (req, res) => {
   }).then((categoryData) => {
     res.json(categoryData);
   });
-
-  // be sure to include its associated Products
 });
 
 router.get('/:id', (req, res) => {
   // find one category by its `id` value
-  // Category.findByPk(req.params.id).then((categoryData) => {
-  //   res.json(categoryData);
-  // });
   Category.findOne({
     include: [{ model: Product }],
     where: { id: req.params.id },
-    // order: ['category_name'],
   }).then((categoryData) => {
-    // console.log(categoryData);
     res.json(categoryData);
   });
-
-  // be sure to include its associated Products
 });
 
 router.post('/', (req, res) => {
   // create a new category
   Category.create(req.body)
-    .then((newCategory) => {
-      // res.status(200).json(newCategory);
-      res.json(newCategory);
+    .then((categoryData) => {
+      res.json(categoryData);
     })
     .catch((err) => {
-      // res.status(500).json(err);
       res.json(err);
     });
 });
@@ -49,7 +38,6 @@ router.put('/:id', async (req, res) => {
   // update a category by its `id` value
   Category.update(
     {
-      // All the fields you can update and the data attached to the request body.
       category_name: req.body.category_name,
     },
     {
@@ -58,24 +46,14 @@ router.put('/:id', async (req, res) => {
       },
     }
   )
-    .then((updatedCategory) => {
-      res.json(updatedCategory);
+    .then(() => {
+      Category.findOne({
+        include: [{ model: Product }],
+        where: { id: req.params.id },
+      }).then((categoryData) => {
+        res.json(categoryData);
+      });
     })
-    // .catch((err) => res.json(err));
-    // try {
-    //   const userData = await Category.update(req.body, {
-    //     where: {
-    //       id: req.params.id,
-    //     },
-    //   });
-    //   if (!userData[0]) {
-    //     res.status(404).json({ message: 'No category with this id!' });
-    //     return;
-    //   }
-    //   res.status(200).json(userData);
-    // } catch (err) {
-    //   res.status(500).json(err);
-    // }
 });
 
 router.delete('/:id', (req, res) => {
@@ -85,8 +63,8 @@ router.delete('/:id', (req, res) => {
       id: req.params.id,
     },
   })
-    .then((deletedCategory) => {
-      res.json(deletedCategory);
+    .then(() => {
+      res.json(`The category with id:${req.params.id} has been deleted.`);
     })
     .catch((err) => res.json(err));
 });
