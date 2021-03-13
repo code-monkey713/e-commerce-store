@@ -38,15 +38,6 @@ router.post('/', (req, res) => {
       }
       res.status(200).json(product);
     })
-    // .then(() => {
-      // Product.findOne({
-      //   include: [{ model: Category }, { model: Tag }],
-      //   where: { id: req.params.id },
-      // })
-      // .then((productData) => {
-      //   res.json(productData);
-      // });
-    // })
     .then((productTagIds) => res.status(200).json(productTagIds))
     .catch((err) => {
       console.log(err);
@@ -82,7 +73,6 @@ router.put('/:id', (req, res) => {
       const productTagsToRemove = productTags
         .filter(({ tag_id }) => !req.body.tagIds.includes(tag_id))
         .map(({ id }) => id);
-
       // run both actions
       return Promise.all([
         ProductTag.destroy({ where: { id: productTagsToRemove } }),
@@ -91,7 +81,7 @@ router.put('/:id', (req, res) => {
     })
     .then((updatedProductTags) => res.json(updatedProductTags))
     .catch((err) => {
-      // console.log(err);
+      console.log(err);
       res.status(400).json(err);
     });
 });
@@ -107,22 +97,6 @@ router.delete('/:id', async (req, res) => {
     res.json(`The product with ID:${req.params.id} has been deleted.`);
   })
   .catch((err) => res.json(err));
-//   try {
-//     const productData = await Product.destroy({
-//       where: {
-//         id: req.params.id
-//       }
-//     });
-
-//     if (!productData) {
-//       res.status(404).json({ message: 'No product found with this id!' });
-//       return;
-//     }
-
-//     res.status(200).json(productData);
-//   } catch (err) {
-//     res.status(500).json(err);
-//   }
 });
 
 module.exports = router;
